@@ -37,7 +37,7 @@ jobs:
         run: |
           $tag = "${{ steps.tag.outputs.TAG }}"
           $zipName = "frogs-and-flies-$tag-windows-x64.zip"
-          Compress-Archive -Path "dist\Frogs and Flies.exe", "README.md" -DestinationPath $zipName
+          Compress-Archive -Path "dist\Frogs and Flies.exe", "README.md", "start.bat" -DestinationPath $zipName
         shell: pwsh
 
       - name: Create GitHub Release
