@@ -1,0 +1,47 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install pygame pyinstaller
+
+      - name: Build executable
+        run: |
+          python -m PyInstaller --onefile --windowed --name "Frogs and Flies" --icon "frog_icon.ico" --add-data "sounds;sounds" --add-data "frog_icon.ico;." main.py
+
+      - name: Get tag name
+        id: tag
+        run: echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+        shell: bash
+
+      - name: Create release zip
+        run: |
+          $tag = "${{ steps.tag.outputs.TAG }}"
+          $zipName = "frogs-and-flies-$tag-windows-x64.zip"
+          Compress-Archive -Path "dist\Frogs and Flies.exe", "README.md" -DestinationPath $zipName
+        shell: pwsh
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "Frogs and Flies ${{ steps.tag.outputs.TAG }}"
+          files: frogs-and-flies-${{ steps.tag.outputs.TAG }}-windows-x64.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

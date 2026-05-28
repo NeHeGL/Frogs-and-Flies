@@ -1,0 +1,6 @@
+@echo off
+echo Installing dependencies...
+pip install pygame
+echo.
+echo Starting Frogs and Flies...
+python main.py
