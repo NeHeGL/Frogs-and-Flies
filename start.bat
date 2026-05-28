@@ -1,6 +1,7 @@
 @echo off
-echo Checking Python version...
-python --version
+cd /d "%~dp0"
+echo Checking Python...
+python --version >nul 2>&1
 if errorlevel 1 (
     echo.
     echo ERROR: Python not found. Please install Python from https://www.python.org/downloads/
@@ -8,19 +9,16 @@ if errorlevel 1 (
     pause
     exit /b 1
 )
-echo.
 echo Updating pip...
-python -m pip install --upgrade pip
-echo.
+python -m pip install --upgrade pip --quiet
 echo Installing pygame...
-python -m pip install --only-binary :all: pygame
+python -m pip install --only-binary :all: pygame --quiet >nul 2>&1
 if errorlevel 1 (
-    echo pygame not available for your Python version, trying pygame-ce...
-    python -m pip install --only-binary :all: pygame-ce
+    python -m pip install --only-binary :all: pygame-ce --quiet
     if errorlevel 1 (
         echo.
-        echo ERROR: Could not install pygame or pygame-ce for your Python version.
-        echo Please report this issue at https://github.com/NeHeGL/Frogs-and-Flies/issues
+        echo ERROR: Could not install pygame. Please report this at:
+        echo https://github.com/NeHeGL/Frogs-and-Flies/issues
         pause
         exit /b 1
     )
