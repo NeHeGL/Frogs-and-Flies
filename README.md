@@ -1,5 +1,7 @@
 # Frogs and Flies
 
+**2026 Jeff Molofee (NeHe)**
+
 A faithful Python/pygame reimplementation of the classic **Frogs and Flies** (Activision, 1982) for the Atari 2600, reverse-engineered from the original 6502 assembly source.
 
 ## Screenshots
