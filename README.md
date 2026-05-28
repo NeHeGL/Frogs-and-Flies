@@ -33,10 +33,13 @@ A faithful Python/pygame reimplementation of the classic **Frogs and Flies** (Ac
 
 ## Running from Source
 
-**Requirements:** Python 3.11+, pygame 2.x
+**Requirements:** Python 3.11, 3.12, or 3.13 — pygame does not yet have pre-built wheels for Python 3.14+
 
+**Windows:** Double-click `start.bat` — it will install pygame and launch the game automatically.
+
+**Manual install:**
 ```bash
-pip install pygame
+pip install --only-binary :all: pygame
 python main.py
 ```
 

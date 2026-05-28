@@ -1,20 +1,26 @@
 @echo off
-echo Updating pip...
-python -m pip install --upgrade pip
+echo Checking Python version...
+python --version
 if errorlevel 1 (
     echo.
-    echo ERROR: Could not update pip. Make sure Python 3.11+ is installed and in your PATH.
-    echo Download Python from https://www.python.org/downloads/
+    echo ERROR: Python not found. Please install Python 3.11, 3.12, or 3.13 from:
+    echo https://www.python.org/downloads/
     echo Make sure to check "Add Python to PATH" during installation.
     pause
     exit /b 1
 )
 echo.
-echo Installing dependencies...
-pip install pygame
+echo Updating pip...
+python -m pip install --upgrade pip
+echo.
+echo Installing pygame (pre-built binary only)...
+python -m pip install --only-binary :all: pygame
 if errorlevel 1 (
     echo.
-    echo ERROR: Failed to install pygame. See above for details.
+    echo ERROR: No pre-built pygame available for your Python version.
+    echo pygame supports Python 3.11, 3.12, and 3.13.
+    echo Please install Python 3.13 from https://www.python.org/downloads/
+    echo and re-run this script.
     pause
     exit /b 1
 )
