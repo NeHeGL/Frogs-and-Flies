@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+.venv/
+venv/
+env/
+
+# PyInstaller build artifacts
+build/
+*.spec
+
+# All backup folders (timestamped, rolling, nested, and plural)
+backup/
+backups/
+backup-*/
+**/backup/
+
+# ROM files (binary + disassembly - keep locally but not in git)
+rom/
+
+# Config file (auto-generated at runtime)
+frogs and flies.cfg
+.git_disabled/

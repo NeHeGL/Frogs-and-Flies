@@ -1,0 +1,59 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g. v1.2.3)'
+        required: true
+
+jobs:
+  build-and-release:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.2.2
+
+      - name: Create and push tag
+        run: |
+          git tag ${{ inputs.version }}
+          git push origin ${{ inputs.version }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5.6.0
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt pyinstaller
+
+      - name: Build executable
+        run: |
+          python -m PyInstaller --onefile --windowed --name "Frogs and Flies" --icon "frog_icon.ico" --add-data "sounds;sounds" --add-data "frog_icon.ico;." main.py
+
+      - name: Package release zip
+        shell: pwsh
+        run: |
+          $zipName = "Frogs-and-Flies-${{ inputs.version }}-windows-x64.zip"
+          Compress-Archive -Path "dist\Frogs and Flies.exe", "README.md" -DestinationPath $zipName -Force
+          echo "ZIP_NAME=$zipName" >> $env:GITHUB_ENV
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2.3.2
+        with:
+          tag_name: ${{ inputs.version }}
+          name: "Frogs and Flies ${{ inputs.version }}"
+          body: |
+            ## Frogs and Flies ${{ inputs.version }}
+
+            ### Installation
+            1. Download `Frogs-and-Flies-${{ inputs.version }}-windows-x64.zip`
+            2. Extract and run `Frogs and Flies.exe` — no installation required.
+
+            ### Requirements
+            - Windows 10/11 x64
+          files: ${{ env.ZIP_NAME }}
+
